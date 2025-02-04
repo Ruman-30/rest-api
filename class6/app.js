@@ -1,7 +1,9 @@
 const express = require("express");
+const cors = require("cors")
 const fs = require("fs")
 const app = express();
 app.use(express.json())
+app.use(cors())
 app.post("/create", (req, res)=>{
   const {fileName, fileData} = req.body
   const filePath = "./uploads/" + fileName
@@ -46,6 +48,17 @@ app.delete("/delete/:fileName", (req, res)=>{
             console.log(err);
             
         }
+    })
+})
+app.get("/get-all", (req, res)=>{
+    fs.readdir("./uploads", (err, files)=>{
+      if(err){
+        console.log(err);
+        res.send("error in reading file")
+        
+      }else{
+        res.send(files)
+      }
     })
 })
 app.listen(3000, ()=>{
